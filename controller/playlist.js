@@ -22,7 +22,7 @@ router.get("/list", async (ctx, next) => {
     json: true // Automatically stringifies the body to JSON
   };
 
-  ctx.body = await rp(options)
+  const data = await rp(options)
     .then(res => {
       // console.log(res);
       return JSON.parse(res.resp_data).data;
@@ -31,7 +31,10 @@ router.get("/list", async (ctx, next) => {
       // POST failed...
     });
 
-  // ctx.body = "歌单列表";
+  ctx.body = {
+    data,
+    code: 20000
+  };
 });
 
 module.exports = router;

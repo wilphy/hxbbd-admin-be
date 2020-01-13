@@ -9,6 +9,8 @@ router.get("/list", async (ctx, next) => {
   const ENV = "test-8l4sl";
   //查询歌单列表
   const url = `https://api.weixin.qq.com/tcb/invokecloudfunction?access_token=${access_token}&env=${ENV}&name=music`;
+  const query = ctx.request.query;
+  console.log(query);
 
   //发送请求
   var options = {
@@ -16,8 +18,8 @@ router.get("/list", async (ctx, next) => {
     uri: url,
     body: {
       $url: "playlist",
-      start: 0,
-      count: 20
+      start: parseInt(query.start),
+      count: parseInt(query.count)
     },
     json: true // Automatically stringifies the body to JSON
   };

@@ -4,6 +4,8 @@ const Router = require("koa-router");
 const router = new Router();
 const cors = require("koa2-cors");
 
+const ENV = "test-8l4sl";
+
 //跨域
 app.use(
   cors({
@@ -12,14 +14,17 @@ app.use(
   })
 );
 
+app.use(async (ctx, next) => {
+  console.log("全局中间件");
+  ctx.body = "hello world!";
+  ctx.state.env = ENV;
+  await next();
+});
+
 const playlist = require("./controller/playlist");
 router.use("/playlist", playlist.routes());
 
 app.use(router.routes());
 app.use(router.allowedMethods());
-
-app.use(async ctx => {
-  ctx.body = "hello world!";
-});
 
 app.listen(3000);

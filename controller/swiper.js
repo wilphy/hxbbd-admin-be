@@ -7,22 +7,18 @@ router.get("/list", async (ctx, next) => {
   const query = `db.collection('swiper').get()`; // 默认获取10条数据
   const res = await callCloudDB(ctx, "databasequery", query);
   console.log(res);
-
   // 文件下载链接
   let fileList = [];
   const data = res.data;
   for (let i = 0, len = data.length; i < len; i++) {
-    // console.log(JSON.parse(data[i]).fileid);
     fileList.push({
       // fileid: JSON.parse(data[i]).fileid,
       fileid: `cloud://test-8l4sl.7465-test-8l4sl-1300954619/swiper/banner${i+1}.jpg`,
       max_age: 7200
     });
   }
-  console.log(fileList)
   const dlRes = await cloudStorage.download(ctx, fileList);
   console.log(dlRes);
-
   let returnData = [];
   for (let i = 0, len = dlRes.file_list.length; i < len; i++) {
     returnData.push({
@@ -34,6 +30,26 @@ router.get("/list", async (ctx, next) => {
   ctx.body = {
     code: 20000,
     data: returnData
+  };
+});
+
+// 上传
+router.post("/upload", async (ctx, next) => {
+  const fileid = await cloudStorage.upload(ctx);
+  console.log(fileid);
+
+  // 写数据库
+  const query = `
+  db.collection('swiper').add({
+      data: {
+          fileid: '${fileid}'
+      }
+  })
+`;
+  const res = await callCloudDB(ctx, "databaseadd", query);
+  ctx.body = {
+    code: 20000,
+    id_list: res.id_list
   };
 });
 

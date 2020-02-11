@@ -29,8 +29,8 @@ const cloudStorage = {
     // 1、请求地址
     const ACCESS_TOKEN = await getAccessToken();
     const file = ctx.request.files.file;
-    // const path = `swiper/${Date.now()}-${Math.random()}-${file.name}`;
-    const path = `swiper/${file.name}`;
+    const path = `swiper/${Date.now()}-${Math.random()}-${file.name}`;
+    // const path = `swiper/${file.name}`;
     const options = {
       method: "POST",
       uri: `https://api.weixin.qq.com/tcb/uploadfile?access_token=${ACCESS_TOKEN}`,

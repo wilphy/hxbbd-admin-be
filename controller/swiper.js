@@ -12,9 +12,9 @@ router.get("/list", async (ctx, next) => {
   const data = res.data;
   for (let i = 0, len = data.length; i < len; i++) {
     fileList.push({
-      // fileid: JSON.parse(data[i]).fileid,
-      fileid: `cloud://test-8l4sl.7465-test-8l4sl-1300954619/swiper/banner${i +
-        1}.jpg`,
+      fileid: JSON.parse(data[i]).fileid,
+      // fileid: `cloud://test-8l4sl.7465-test-8l4sl-1300954619/swiper/banner${i +
+      //   1}.jpg`,
       max_age: 7200
     });
   }

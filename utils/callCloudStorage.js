@@ -1,6 +1,6 @@
 const getAccessToken = require("./getAccessToken.js");
 const rp = require("request-promise");
-const fs = require("fs")
+const fs = require("fs");
 
 const cloudStorage = {
   async download(ctx, fileList) {
@@ -42,11 +42,13 @@ const cloudStorage = {
     };
     //  请求参数的
     const info = await rp(options)
-      .then(function(res) {
+      .then((res) => {
         return res;
       })
-      .catch(function(err) {});
-    console.log(info);
+      .catch((err) => {
+        console.log(err)
+      });
+    // console.log(info);
 
     // 2、上传图片
     const params = {
@@ -66,6 +68,27 @@ const cloudStorage = {
     };
     await rp(params);
     return info.file_id;
+  },
+
+  async delete(ctx, fileid_list) {
+    const ACCESS_TOKEN = await getAccessToken();
+    const options = {
+      method: "POST",
+      uri: `https://api.weixin.qq.com/tcb/batchdeletefile?access_token=${ACCESS_TOKEN}`,
+      body: {
+        env: ctx.state.env,
+        fileid_list: fileid_list
+      },
+      json: true
+    };
+
+    return await rp(options)
+      .then(res => {
+        return res;
+      })
+      .catch(function(err) {
+        console.log(err);
+      });
   }
 };
 
